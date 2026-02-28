@@ -232,6 +232,8 @@
             <p style="color: #444; font-size: 1.1rem;">I love you. Let's talk? ✨</p>
         </div>
 
+        
+
     </div>
 
     <script>
@@ -253,17 +255,29 @@
         }
         setInterval(createHeart, 300); // Create a new heart every 300ms
 
-        // --- 2. The Evading 'No' Button ---
         const noBtn = document.getElementById('noBtn');
-        function moveNoButton() {
-            // Get random position within the viewport, subtracting button size
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 50); // Add padding
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 50);
 
-            noBtn.style.position = 'fixed';
-            noBtn.style.left = x + 'px';
-            noBtn.style.top = y + 'px';
-        }
+function moveNoButton(event) {
+    // If it's a touch event, prevent it from acting like a 'click'
+    if (event) {
+        event.preventDefault();
+    }
+
+    // Calculate available space, keeping the button within the screen padding
+    const padding = 50;
+    const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+    const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+    // Generate random coordinates
+    const randomX = Math.floor(Math.random() * maxX);
+    const randomY = Math.floor(Math.random() * maxY);
+
+    // Apply new position
+    noBtn.style.position = 'fixed';
+    noBtn.style.left = randomX + 'px';
+    noBtn.style.top = randomY + 'px';
+    noBtn.style.zIndex = '999'; // Ensure it stays above everything
+}
 
         // --- 3. First Acceptance Logic (Confetti + Reveal Promises) ---
         function acceptApology() {
