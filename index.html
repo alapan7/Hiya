@@ -196,7 +196,12 @@
             <p>You mean the world to me. Can you *please* forgive me?</p>
             <div class="btn-container">
                 <button class="btn" id="yesBtn" onclick="acceptApology()">Yes, I Forgive You ❤️</button>
-                <button class="btn" id="noBtn" onmouseover="moveNoButton()">No 😤</button>
+                <div id="noBtn" 
+     onmouseover="moveNoButton()" 
+     ontouchstart="moveNoButton(event)" 
+     style="padding: 12px 30px; border-radius: 50px; font-weight: 600; cursor: pointer; background-color: #f8bbd0; color: #880e4f; display: inline-block; user-select: none; -webkit-tap-highlight-color: transparent;">
+     No 😤
+</div>
             </div>
         </div>
 
@@ -257,27 +262,36 @@
 
         const noBtn = document.getElementById('noBtn');
 
-function moveNoButton(event) {
-    // If it's a touch event, prevent it from acting like a 'click'
-    if (event) {
-        event.preventDefault();
+function moveNoButton(e) {
+    // 1. Stop the browser from doing anything else
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
     }
 
-    // Calculate available space, keeping the button within the screen padding
-    const padding = 50;
+    // 2. Calculate available screen space
+    const padding = 60; // Extra padding for mobile edges
     const maxX = window.innerWidth - noBtn.offsetWidth - padding;
     const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
-    // Generate random coordinates
-    const randomX = Math.floor(Math.random() * maxX);
-    const randomY = Math.floor(Math.random() * maxY);
+    // 3. Generate random coordinates
+    const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+    const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
 
-    // Apply new position
+    // 4. Move it instantly
     noBtn.style.position = 'fixed';
     noBtn.style.left = randomX + 'px';
     noBtn.style.top = randomY + 'px';
-    noBtn.style.zIndex = '999'; // Ensure it stays above everything
+    noBtn.style.zIndex = '9999';
 }
+
+// Ensure the 'No' div does nothing if somehow actually 'clicked'
+noBtn.onclick = function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+};
+
 
         // --- 3. First Acceptance Logic (Confetti + Reveal Promises) ---
         function acceptApology() {
